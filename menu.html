@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Karak Express - Menu</title>
+  <meta name="description" content="Explore the full Karak Express menu â€” Burgers, Biryani, Shawarma, Chai and more.">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --yellow: #F5B731;
+      --red: #E84040;
+      --green: #25D366;
+      --dark: #1a2744;
+      --white: #ffffff;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      font-family: 'Poppins', sans-serif;
+      background: var(--yellow);
+      overflow-x: hidden;
+    }
+
+    /* ======== PAGE WRAPPER ======== */
+    .page {
+      min-height: 100vh;
+      background: var(--yellow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 90px;
+    }
+
+    /* Base Animations */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ---- Logo & Tagline (Matching other pages) ---- */
+    .logo-wrap {
+      display: flex;
+      justify-content: center;
+      margin-top: 24px;
+      width: 100%;
+      animation: fadeInUp 0.4s ease-out;
+    }
+    .logo-wrap img {
+      width: clamp(100px, 24vw, 140px);
+      height: auto;
+      border-radius: 18px;
+      display: block;
+      filter: drop-shadow(0 8px 24px rgba(0,0,0,0.18));
+    }
+
+    .tagline {
+      text-align: center;
+      position: relative;
+      margin-top: 14px;
+      margin-bottom: 8px;
+      animation: fadeInUp 0.5s ease-out 0.1s both;
+    }
+    .tagline-inner {
+      display: inline-block;
+      position: relative;
+    }
+    .spark {
+      position: absolute;
+      left: -22px;
+      top: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .spark span {
+      display: block;
+      height: 3px;
+      border-radius: 2px;
+      background: var(--red);
+    }
+    .spark span:first-child { width: 8px; transform: rotate(-20deg); }
+    .spark span:last-child { width: 13px; }
+
+    .tagline h1 {
+      font-size: clamp(22px, 5.5vw, 28px);
+      font-weight: 900;
+      color: var(--dark);
+      line-height: 1.2;
+      letter-spacing: -0.3px;
+    }
+    .tagline-line {
+      width: 60px;
+      height: 3.5px;
+      background: var(--red);
+      border-radius: 2px;
+      margin: 6px auto 0;
+    }
+
+    /* ======== SEARCH BAR ======== */
+    .search-wrap {
+      width: 100%;
+      max-width: 480px;
+      padding: 12px 16px 0;
+      animation: fadeInUp 0.5s ease-out 0.2s both;
+    }
+
+    .search-bar {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      height: 48px;
+      box-shadow: 0 6px 20px rgba(26, 39, 68, 0.08);
+      gap: 10px;
+      transition: all 0.25s ease;
+    }
+    .search-bar:focus-within {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(26, 39, 68, 0.12);
+      background: var(--white);
+    }
+
+    .search-bar svg {
+      color: #a4b0be;
+      flex-shrink: 0;
+    }
+
+    .search-bar input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--dark);
+      background: transparent;
+    }
+
+    .search-bar input::placeholder {
+      color: #a4b0be;
+    }
+
+    .search-icon-right {
+      width: 34px;
+      height: 34px;
+      background: var(--red);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(232, 64, 64, 0.3);
+      transition: transform 0.2s ease;
+    }
+    .search-icon-right svg { color: var(--white); stroke: var(--white); }
+    .search-icon-right:hover {
+      transform: scale(1.05) rotate(5deg);
+    }
+
+    /* ======== CATEGORY TABS ======== */
+    .category-scroll {
+      width: 100%;
+      max-width: 480px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding: 16px 16px 4px;
+      animation: fadeInUp 0.5s ease-out 0.3s both;
+    }
+
+    .category-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .category-list {
+      display: flex;
+      gap: 10px;
+      width: max-content;
+      padding-bottom: 8px; /* space for shadow */
+    }
+
+    .cat-tab {
+      padding: 8px 20px;
+      border-radius: 50px;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      background: rgba(255, 255, 255, 0.65);
+      color: var(--dark);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .cat-tab.active {
+      background: var(--red);
+      color: var(--white);
+      box-shadow: 0 6px 16px rgba(232, 64, 64, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .cat-tab:hover:not(.active) {
+      background: var(--white);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    }
+
+    /* ======== MAIN WHITE CARD AREA ======== */
+    .main-body {
+      width: 100%;
+      max-width: 1000px;
+      margin-top: 10px;
+      border-radius: 32px 32px 0 0;
+      padding: 24px 20px 12px;
+      flex: 1;
+      min-height: calc(100vh - 200px);
+      animation: fadeInUp 0.6s ease-out 0.4s both;
+    }
+
+    /* ======== BESTSELLERS ======== */
+    .section-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 14px;
+    }
+
+    .bestsellers-scroll {
+      overflow-x: auto;
+      scrollbar-width: none;
+      margin: 0 -20px;
+      padding: 0 20px;
+      margin-bottom: 28px;
+    }
+
+    .bestsellers-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .bestsellers-list {
+      display: flex;
+      gap: 14px;
+      width: max-content;
+      padding-bottom: 12px; /* for shadow */
+    }
+
+    .bs-card {
+      width: 130px;
+      background: var(--white);
+      border-radius: 20px;
+      overflow: hidden;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 6px 16px rgba(26, 39, 68, 0.08);
+      position: relative;
+    }
+
+    .bs-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(26, 39, 68, 0.12);
+    }
+
+    .bs-card-img {
+      width: 100%;
+      height: 96px;
+      object-fit: cover;
+      display: block;
+    }
+    .bs-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 96px;
+      background: linear-gradient(to bottom, rgba(0,0,0,0) 60%, rgba(0,0,0,0.3) 100%);
+      pointer-events: none;
+    }
+
+    .bs-card-body {
+      padding: 10px;
+      background: var(--white);
+      position: relative;
+      z-index: 1;
+    }
+
+    .bs-card-name {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--dark);
+      line-height: 1.3;
+      margin-bottom: 4px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .bs-rating {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--white);
+      background: var(--dark);
+      padding: 3px 6px;
+      border-radius: 100px;
+    }
+    .bs-rating span {
+      color: var(--yellow);
+    }
+
+    /* ======== ALL MENU LIST ======== */
+    .menu-section-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 14px;
+    }
+
+    .menu-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding-bottom: 24px;
+    }
+
+    /* Each card is a white rounded box */
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      box-shadow: 0 4px 16px rgba(26, 39, 68, 0.06);
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .menu-item:hover {
+      transform: translateY(-3px) scale(1.01);
+      box-shadow: 0 10px 24px rgba(26, 39, 68, 0.1);
+      background: var(--white);
+    }
+
+    /* Food image - square, rounded */
+    .menu-item-img {
+      width: 88px;
+      height: 88px;
+      border-radius: 16px;
+      object-fit: cover;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    /* Text block */
+    .menu-item-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .menu-item-name {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .menu-item-desc {
+      font-size: 11px;
+      color: rgba(26, 39, 68, 0.65);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+
+    .menu-item-rating {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+    .menu-item-rating .star { color: #f39c12; }
+
+    .rating-count {
+      color: rgba(26, 39, 68, 0.45);
+      font-weight: 600;
+    }
+
+    /* Right: price + chevron button stacked */
+    .menu-item-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 12px;
+      flex-shrink: 0;
+      height: 88px;
+      padding-right: 4px;
+    }
+
+    /* Price: "23 SAR" â€” number bold, SAR small beside it */
+    .menu-item-price {
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--dark);
+      white-space: nowrap;
+      line-height: 1;
+    }
+
+    .menu-item-price .sar {
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(26, 39, 68, 0.5);
+      margin-left: 2px;
+    }
+
+    /* Yellow square-ish chevron arrow button */
+    .add-btn {
+      width: 34px;
+      height: 34px;
+      background: var(--yellow);
+      border: none;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .add-btn:hover {
+      background: var(--red);
+      transform: scale(1.1) rotate(90deg);
+      box-shadow: 0 6px 14px rgba(232, 64, 64, 0.3);
+    }
+
+    .add-btn:hover svg {
+      stroke: var(--white);
+    }
+
+    .add-btn svg {
+      stroke: var(--dark);
+      transition: stroke 0.2s;
+    }
+
+    /* ======== BOTTOM NAVIGATION ======== */
+    .bottom-nav-wrapper {
+      position: fixed;
+      bottom: clamp(16px, 4vw, 24px);
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      min-width: 280px;
+      width: clamp(280px, 70vw, 380px);
+    }
+
+    .bottom-nav {
+      background: var(--white);
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      width: 100%;
+      padding: 8px 16px;
+      border-radius: 50px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      gap: 4px;
+    }
+
+    .nav-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 52px;
+      height: 46px;
+      border-radius: 50px;
+      text-decoration: none;
+      color: rgba(26, 39, 68, 0.5);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .nav-item svg {
+      width: 26px;
+      height: 26px;
+      transition: transform 0.2s;
+    }
+
+    .nav-item:hover {
+      color: var(--dark);
+    }
+
+    .nav-item.active {
+      background: var(--red);
+      color: var(--white);
+      box-shadow: 0 6px 16px rgba(232, 64, 64, 0.3);
+      transform: translateY(-4px);
+    }
+    
+    .nav-item.active::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      width: 5px;
+      height: 5px;
+      background: var(--dark);
+      border-radius: 50%;
+    }
+
+    .nav-item:hover svg {
+      transform: translateY(-2px);
+    }
+
+    .nav-item.active svg {
+      transform: translateY(0);
+    }
+
+    .nav-item:active {
+      transform: scale(0.92);
+    }
+
+    /* ======== DESKTOP ======== */
+    @media (min-width: 768px) {
+
+      .search-wrap,
+      .category-scroll {
+        max-width: 960px;
+      }
+      .main-body {
+        max-width: 960px;
+      }
+
+      .menu-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+        gap: 16px;
+        align-items: start;
+      }
+
+      .menu-section-title,
+      .section-title {
+        font-size: 20px;
+      }
+      
+      .bs-card {
+        width: 160px;
+      }
+      .bs-card-img {
+        height: 110px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <!-- Logo -->
+    <div class="logo-wrap">
+      <img src="media/logo2.webp" alt="Karak Express">
+    </div>
+
+    <!-- Tagline -->
+    <div class="tagline">
+      <div class="tagline-inner">
+        <div class="spark">
+          <span></span>
+          <span></span>
+        </div>
+        <h1>Menu</h1>
+      </div>
+      <div class="tagline-line"></div>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-wrap">
+      <div class="search-bar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        </svg>
+        <input type="text" id="menu-search" placeholder="Search for your favourites..." autocomplete="off">
+        <div class="search-icon-right">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1a2744" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Tabs -->
+    <div class="category-scroll">
+      <div class="category-list" id="cat-list">
+        <button class="cat-tab active" data-cat="all">All</button>
+        <button class="cat-tab" data-cat="deals">Deals</button>
+        <button class="cat-tab" data-cat="broast">Broast</button>
+        <button class="cat-tab" data-cat="biryani">Biryani</button>
+        <button class="cat-tab" data-cat="burgers">Burgers</button>
+        <button class="cat-tab" data-cat="shawarma">Shawarma</button>
+        <button class="cat-tab" data-cat="chai">Chai</button>
+        <button class="cat-tab" data-cat="pizza">Pizza</button>
+        <button class="cat-tab" data-cat="sandwich">Sandwich</button>
+        <button class="cat-tab" data-cat="juices">Juices</button>
+        <button class="cat-tab" data-cat="breakfast">Breakfast</button>
+        <button class="cat-tab" data-cat="curries">Curries</button>
+        <button class="cat-tab" data-cat="daal">Daal</button>
+        <button class="cat-tab" data-cat="veggies">Veggies</button>
+        <button class="cat-tab" data-cat="shakes">Shakes</button>
+        <button class="cat-tab" data-cat="sides">Sides</button>
+      </div>
+    </div>
+
+    <!-- Main White Body -->
+    <div class="main-body">
+
+      <!-- Bestsellers -->
+      <div class="section-title">Bestsellers</div>
+      <div class="bestsellers-scroll">
+        <div class="bestsellers-list">
+          <div class="bs-card">
+            <img class="bs-card-img" src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300&q=80" alt="Ultimate Chicken Burger">
+            <div class="bs-card-body">
+              <div class="bs-card-name">Ultimate Chicken Burger</div>
+              <div class="bs-rating">&#11088; 4.7</div>
+            </div>
+          </div>
+          <div class="bs-card">
+            <img class="bs-card-img" src="https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=300&q=80" alt="Krispy Broast">
+            <div class="bs-card-body">
+              <div class="bs-card-name">Krispy Broast</div>
+              <div class="bs-rating">&#11088; 4.8</div>
+            </div>
+          </div>
+          <div class="bs-card">
+            <img class="bs-card-img" src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=300&q=80" alt="Krispy Biryani">
+            <div class="bs-card-body">
+              <div class="bs-card-name">Krispy Biryani</div>
+              <div class="bs-rating">&#11088; 4.6</div>
+            </div>
+          </div>
+          <div class="bs-card">
+            <img class="bs-card-img" src="https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?w=300&q=80" alt="Sarukh Shawarma">
+            <div class="bs-card-body">
+              <div class="bs-card-name">Sarukh Shawarma</div>
+              <div class="bs-rating">&#11088; 4.5</div>
+            </div>
+          </div>
+          <div class="bs-card">
+            <img class="bs-card-img" src="https://images.unsplash.com/photo-1571934811356-5cc061b6821f?w=300&q=80" alt="Karak Chai">
+            <div class="bs-card-body">
+              <div class="bs-card-name">Karak Chai</div>
+              <div class="bs-rating">&#11088; 4.9</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-section-title">All Menu</div>
+      <div class="menu-list" id="menu-list">
+
+        <div class="menu-item" data-cat="deals">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=200&q=80" alt="Broast Combo">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Broast Combo</div>
+            <div class="menu-item-desc">Krispy broast chicken served with fries and drink.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">25 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="deals">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=200&q=80" alt="Classic Biryani Combo">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Classic Biryani Combo</div>
+            <div class="menu-item-desc">Flavorful traditional biryani paired with sides and refreshing drink.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">28 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="deals">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=200&q=80" alt="Shawarma Combo">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Shawarma Combo</div>
+            <div class="menu-item-desc">Juicy shawarma wrap served with fries and a chilled beverage.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">22 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="broast">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=200&q=80" alt="Krispy Broast 2pcs">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Krispy Broast 2pcs</div>
+            <div class="menu-item-desc">2pcs krispy broast, tasty fries, bun, garlic and ketchup.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">20 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="broast">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=200&q=80" alt="Krispy Broast 4pcs">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Krispy Broast 4pcs</div>
+            <div class="menu-item-desc">4pcs krispy broast, tasty fries, bun, garlic and ketchup.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">35 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="broast">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=200&q=80" alt="Krispy Broast">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Krispy Broast</div>
+            <div class="menu-item-desc">Krispy broast, tasty fries, bun, garlic and ketchup.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">15 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="biryani">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=200&q=80" alt="Krispy Biryani">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Krispy Biryani</div>
+            <div class="menu-item-desc">Aromatic biryani rice topped with krispy fried chicken pieces.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">21 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="biryani">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=200&q=80" alt="Chicken Biryani - Small">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Chicken Biryani - Small</div>
+            <div class="menu-item-desc">2 pieces, fresh local chicken, long grain malka basmati rice with special masala, served with raita.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">18 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="biryani">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=200&q=80" alt="Chicken Biryani">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Chicken Biryani</div>
+            <div class="menu-item-desc">Fresh local chicken, long grain malka basmati rice with special masala, served with raita.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">25 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="biryani">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=200&q=80" alt="Beef Biryani - Small">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Beef Biryani - Small</div>
+            <div class="menu-item-desc">Aromatic basmati rice slow cooked with tender beef and biryani spices, served with raita.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">20 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="biryani">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=200&q=80" alt="Beef Biryani - Large">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Beef Biryani - Large</div>
+            <div class="menu-item-desc">Aromatic basmati rice slow cooked with tender beef and biryani spices, served with raita.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">30 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="burgers">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200&q=80" alt="Beef Burger">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Beef Burger</div>
+            <div class="menu-item-desc">Fried beef sandwich with ketchup, mayonnaise sauce, fresh lettuce and tomato.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">18 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="burgers">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200&q=80" alt="Chicken Burger">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Chicken Burger</div>
+            <div class="menu-item-desc">Fried chicken sandwich with ketchup, mayonnaise sauce, fresh lettuce and tomato.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">16 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="burgers">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200&q=80" alt="Zinger Burger">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Zinger Burger</div>
+            <div class="menu-item-desc">Fried crispy chicken sandwich with ketchup, mayonnaise sauce, fresh lettuce and tomato.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">20 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="burgers">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200&q=80" alt="Ultimate Chicken Burger">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Ultimate Chicken Burger</div>
+            <div class="menu-item-desc">Double patty krispy premium loaded burger with full toppings.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">28 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="burgers">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200&q=80" alt="Double Monster Chicken Burger">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Double Monster Chicken Burger</div>
+            <div class="menu-item-desc">Two golden krispy chicken fillets with fresh toppings and signature sauces.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">32 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="burgers">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200&q=80" alt="Double Decker Burger">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Double Decker Burger</div>
+            <div class="menu-item-desc">A big three-layer stacked patty burger with melted cheese and bold sauces.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">35 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="shawarma">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?w=200&q=80" alt="Shawarma Shami">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Shawarma Shami</div>
+            <div class="menu-item-desc">Fresh local chicken wrapped in arabic bread with a unique sauce, salad and fries.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">14 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="shawarma">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?w=200&q=80" alt="Sarukh">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Sarukh</div>
+            <div class="menu-item-desc">Fresh local chicken wrapped in arabic bread with a unique sauce, salad and fries.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">16 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="shawarma">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?w=200&q=80" alt="Arabic Shawarma Platter">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Arabic Shawarma Platter</div>
+            <div class="menu-item-desc">Fries local chicken with a unique sauce, salad and fries.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">22 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="shawarma">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?w=200&q=80" alt="Shawarma Platter">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Shawarma Platter</div>
+            <div class="menu-item-desc">Shawarma with bread, salad, chips and sauces.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">25 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="chai">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1571934811356-5cc061b6821f?w=200&q=80" alt="Chai Paratha">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Chai Paratha</div>
+            <div class="menu-item-desc">Warm paratha served with freshly brewed karak chai.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">10 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="chai">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1571934811356-5cc061b6821f?w=200&q=80" alt="Chai">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Chai</div>
+            <div class="menu-item-desc">Strong, aromatic karak chai.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">5 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="pizza">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=200&q=80" alt="Chicken Super Supreme">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Chicken Super Supreme</div>
+            <div class="menu-item-desc">Loaded with chicken, beef, veggies, and extra cheese.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">35 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="pizza">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=200&q=80" alt="VEG Lover">
+          <div class="menu-item-info">
+            <div class="menu-item-name">VEG Lover</div>
+            <div class="menu-item-desc">Fresh mixed vegetables on a cheesy base.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">28 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="pizza">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=200&q=80" alt="Chicken Fajita">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Chicken Fajita</div>
+            <div class="menu-item-desc">Spicy fajita chicken with onions and capsicum.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">32 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="pizza">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=200&q=80" alt="BBQ Chicken">
+          <div class="menu-item-info">
+            <div class="menu-item-name">BBQ Chicken</div>
+            <div class="menu-item-desc">Chicken with smoky BBQ sauce and melted cheese.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">30 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="pizza">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=200&q=80" alt="Margarita">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Margarita</div>
+            <div class="menu-item-desc">Classic cheese pizza with rich tomato sauce.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">22 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="pizza">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=200&q=80" alt="Classic Peperoni">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Classic Peperoni</div>
+            <div class="menu-item-desc">Pepperoni slices with melted cheese and bold flavor.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">30 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="sandwich">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1509722747041-616f39b57ef3?w=200&q=80" alt="Egg Cheese Sandwich">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Egg Cheese Sandwich</div>
+            <div class="menu-item-desc">Warm breakfast sandwich with egg and melted cheese.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">10 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="sandwich">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1509722747041-616f39b57ef3?w=200&q=80" alt="Fries Sandwich">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Fries Sandwich</div>
+            <div class="menu-item-desc">Popular fries sandwich with sauces in soft bread.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">8 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="sandwich">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1509722747041-616f39b57ef3?w=200&q=80" alt="Beef Kebab Sandwich">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Beef Kebab Sandwich</div>
+            <div class="menu-item-desc">Beef breakfast sandwich with sauce and fresh fillings.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">14 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="sandwich">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1509722747041-616f39b57ef3?w=200&q=80" alt="Nuggets Sandwich">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Nuggets Sandwich</div>
+            <div class="menu-item-desc">Nuggets sandwich with krispy bites and signature sauce.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">12 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="sandwich">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1509722747041-616f39b57ef3?w=200&q=80" alt="Falafel Sandwich">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Falafel Sandwich</div>
+            <div class="menu-item-desc">Fresh bread with fried falafel.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">10 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="juices">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=200&q=80" alt="Orange Juice">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Orange Juice</div>
+            <div class="menu-item-desc">Freshly squeezed orange juice.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">10 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="juices">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=200&q=80" alt="Pineapple Juice">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Pineapple Juice</div>
+            <div class="menu-item-desc">Fresh pineapple juice.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">10 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="juices">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=200&q=80" alt="Watermelon Juice">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Watermelon Juice</div>
+            <div class="menu-item-desc">Refreshing watermelon juice.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">8 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="juices">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=200&q=80" alt="Strawberry Juice">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Strawberry Juice</div>
+            <div class="menu-item-desc">Fresh strawberry juice.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">10 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="juices">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=200&q=80" alt="Lemon Mint Juice">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Lemon Mint Juice</div>
+            <div class="menu-item-desc">Refreshing lemon with fresh mint.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">8 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="juices">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=200&q=80" alt="Pomegranate Juice">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Pomegranate Juice</div>
+            <div class="menu-item-desc">Fresh pomegranate juice.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">12 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="breakfast">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1604908177522-1b2c9a236f67?w=200&q=80" alt="Aloo Paratha">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Aloo Paratha</div>
+            <div class="menu-item-desc">Filled with spiced potato.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">8 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="breakfast">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1604908177522-1b2c9a236f67?w=200&q=80" alt="Plain Paratha">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Plain Paratha</div>
+            <div class="menu-item-desc">Freshly cooked plain paratha, perfect with chai.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">5 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="breakfast">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1604908177522-1b2c9a236f67?w=200&q=80" alt="Chicken Paratha">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Chicken Paratha</div>
+            <div class="menu-item-desc">With spiced chicken filling.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">10 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="breakfast">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1604908177522-1b2c9a236f67?w=200&q=80" alt="Omlette Paratha">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Omlette Paratha</div>
+            <div class="menu-item-desc">Paratha stuffed/served with omlette.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">10 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="curries">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=200&q=80" alt="Chicken Curry">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Chicken Curry</div>
+            <div class="menu-item-desc">Traditional chicken curry with aromatic spices.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">18 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="curries">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=200&q=80" alt="Chicken Achari">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Chicken Achari</div>
+            <div class="menu-item-desc">Tender chicken cooked with achari spices, served with fresh naan.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">20 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="curries">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=200&q=80" alt="Chicken Korma">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Chicken Korma</div>
+            <div class="menu-item-desc">Creamy chicken korma with rich spices.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">20 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="curries">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=200&q=80" alt="White Chicken Curry">
+          <div class="menu-item-info">
+            <div class="menu-item-name">White Chicken Curry</div>
+            <div class="menu-item-desc">Creamy white gravy chicken, served with soft naan.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">22 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="curries">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=200&q=80" alt="Chicken Curry with Rice">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Chicken Curry with Rice</div>
+            <div class="menu-item-desc">Tender local chicken curry served with freshly baked naan.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">25 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="curries">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=200&q=80" alt="Haleem">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Haleem</div>
+            <div class="menu-item-desc">Slow-cooked haleem with premium spices.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">18 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="curries">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=200&q=80" alt="Chicken Korma with Rice">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Chicken Korma with Rice</div>
+            <div class="menu-item-desc">Served with freshly baked rice.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">25 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="daal">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=200&q=80" alt="Daal Masoor">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Daal Masoor</div>
+            <div class="menu-item-desc">Traditional red lentil daal with spices.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">12 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="daal">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=200&q=80" alt="Daal Moong">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Daal Moong</div>
+            <div class="menu-item-desc">Yellow moong daal cooked desi style.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">12 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="veggies">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1540420773420-3366772f4999?w=200&q=80" alt="Aloo Palak">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Aloo Palak</div>
+            <div class="menu-item-desc">Spinach and potato with homestyle seasoning.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">14 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="veggies">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1540420773420-3366772f4999?w=200&q=80" alt="Kaddu">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Kaddu</div>
+            <div class="menu-item-desc">Cooked with spices for a classic desi side.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">12 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="veggies">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1540420773420-3366772f4999?w=200&q=80" alt="Mix Sabzi">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Mix Sabzi</div>
+            <div class="menu-item-desc">Seasonal mixed vegetables cooked with light masala.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">14 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="veggies">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1540420773420-3366772f4999?w=200&q=80" alt="Curry Pakora">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Curry Pakora</div>
+            <div class="menu-item-desc">Krispy humus pakoras in a tangy yogurt-based curry.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">14 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="shakes">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=200&q=80" alt="Vanilla Shake">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Vanilla Shake</div>
+            <div class="menu-item-desc">Creamy vanilla ice cream shake.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">12 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="shakes">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=200&q=80" alt="Chocolate Shake">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Chocolate Shake</div>
+            <div class="menu-item-desc">Rich chocolate ice cream shake.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">12 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="shakes">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=200&q=80" alt="Strawberry Shake">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Strawberry Shake</div>
+            <div class="menu-item-desc">Fresh strawberry ice cream shake.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">12 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="shakes">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=200&q=80" alt="Cocktail Shake">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Cocktail Shake</div>
+            <div class="menu-item-desc">Mixed fruit cocktail shake.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">14 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="shakes">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=200&q=80" alt="Mango Lassi">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Mango Lassi</div>
+            <div class="menu-item-desc">Creamy mango yogurt drink.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">10 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="shakes">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=200&q=80" alt="Avocado Shake">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Avocado Shake</div>
+            <div class="menu-item-desc">Smooth avocado blended shake.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">14 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="shakes">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=200&q=80" alt="Fruit Salad">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Fruit Salad</div>
+            <div class="menu-item-desc">A mix of juicy, hand-cut fruits.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">12 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="sides">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?w=200&q=80" alt="French Fries">
+          <div class="menu-item-info">
+            <div class="menu-item-name">French Fries</div>
+            <div class="menu-item-desc">Golden crispy french fries.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">8 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="sides">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?w=200&q=80" alt="Roti">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Roti</div>
+            <div class="menu-item-desc">Freshly baked soft roti.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">2 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="sides">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?w=200&q=80" alt="Raita">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Raita</div>
+            <div class="menu-item-desc">Cool yogurt side with spices.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">3 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="sides">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?w=200&q=80" alt="Kinza Cola">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Kinza Cola</div>
+            <div class="menu-item-desc">Refreshing cola drink.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">3 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+        <div class="menu-item" data-cat="sides">
+          <img class="menu-item-img" src="https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?w=200&q=80" alt="Cold Water">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Cold Water</div>
+            <div class="menu-item-desc">Chilled bottled water.</div>
+            <div class="menu-item-rating">&#11088; 4.6 <span class="rating-count">(120)</span></div>
+          </div>
+          <div class="menu-item-right">
+            <div class="menu-item-price">2 <span class="sar">SAR</span></div>
+            <button class="add-btn" title="Add to cart"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav-wrapper">
+    <nav class="bottom-nav">
+      <a href="index.html" class="nav-item" id="nav-home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+      </a>
+      <a href="menu.html" class="nav-item active" id="nav-menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </a>
+      <a href="branches.html" class="nav-item" id="nav-branches">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+      </a>
+    </nav>
+  </div>
+
+  <script>
+    // ---- Category Filter ----
+    const catTabs = document.querySelectorAll('.cat-tab');
+    const menuItems = document.querySelectorAll('.menu-item');
+    let activeCat = 'all';
+
+    function applyFilters() {
+      const query = document.getElementById('menu-search').value.toLowerCase().trim();
+      menuItems.forEach(item => {
+        const itemCat = item.dataset.cat;
+        const name = item.querySelector('.menu-item-name').textContent.toLowerCase();
+        const desc = item.querySelector('.menu-item-desc').textContent.toLowerCase();
+
+        const catMatch = activeCat === 'all' || itemCat === activeCat;
+        const searchMatch = !query || name.includes(query) || desc.includes(query);
+
+        item.style.display = (catMatch && searchMatch) ? 'flex' : 'none';
+      });
+    }
+
+    catTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        catTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        activeCat = tab.dataset.cat;
+        applyFilters();
+      });
+    });
+
+    // ---- Live Search ----
+    document.getElementById('menu-search').addEventListener('input', applyFilters);
+  </script>
+</body>
+
+</html>

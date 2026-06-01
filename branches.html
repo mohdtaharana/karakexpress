@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Karak Express - Our Branches</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --yellow: #F5B731;
+  --red: #E84040;
+  --green: #25D366;
+  --dark: #1a2744;
+  --white: #ffffff;
+}
+
+html, body {
+  min-height: 100%;
+  font-family: 'Poppins', sans-serif;
+  background: var(--yellow);
+  overflow-x: hidden;
+}
+
+.page {
+  min-height: 100vh;
+  background: var(--yellow);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 90px;
+}
+
+/* ---- Content ---- */
+.content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 480px;
+  padding: clamp(24px, 6vw, 40px) 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(14px, 3vw, 20px);
+}
+
+/* ---- Logo ---- */
+.logo-wrap {
+  display: flex;
+  justify-content: center;
+}
+.logo-wrap img {
+  width: 96px;
+  height: 96px;
+  border-radius: 18px;
+  display: block;
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.18));
+}
+
+/* ---- Tagline ---- */
+.tagline {
+  text-align: center;
+  position: relative;
+  margin-top: -4px;
+}
+.tagline-inner {
+  display: inline-block;
+  position: relative;
+}
+.spark {
+  position: absolute;
+  left: -22px;
+  top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.spark span {
+  display: block;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--red);
+}
+.spark span:first-child { width: 8px; transform: rotate(-20deg); }
+.spark span:last-child { width: 13px; }
+
+.tagline h1 {
+  font-size: clamp(22px, 5.5vw, 28px);
+  font-weight: 900;
+  color: var(--dark);
+  line-height: 1.2;
+  letter-spacing: -0.3px;
+}
+.tagline-line {
+  width: 80px;
+  height: 3.5px;
+  background: var(--red);
+  border-radius: 2px;
+  margin: 6px auto 0;
+}
+
+/* ---- City Switcher ---- */
+.city-switcher {
+  display: flex;
+  width: 100%;
+  gap: 12px;
+  margin-bottom: 4px;
+  margin-top: 4px;
+}
+.city-tab {
+  flex: 1;
+  height: 48px;
+  border-radius: 50px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--white);
+  color: var(--dark);
+  box-shadow: 0 4px 12px rgba(26, 39, 68, 0.06);
+}
+.city-tab svg {
+  stroke-width: 2.5px;
+}
+.city-tab.active {
+  background: var(--red);
+  color: var(--white);
+  box-shadow: 0 8px 20px rgba(232, 64, 64, 0.3);
+}
+
+/* ---- Branch Cards ---- */
+.branch-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.branch-card {
+  background: var(--white);
+  border-radius: 24px;
+  padding: 16px;
+  box-shadow: 0 8px 24px rgba(26,39,68,0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-align: left;
+}
+
+.branch-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(26,39,68,0.1);
+}
+
+.branch-card-top {
+  display: flex;
+  gap: 14px;
+}
+
+.branch-image-wrapper {
+  width: 110px;
+  height: 110px;
+  border-radius: 16px;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.branch-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.branch-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+  min-width: 0; /* Prevents overflow of text */
+}
+
+.branch-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 2px;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--green);
+  border-radius: 50%;
+}
+
+.status-text {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--green);
+}
+
+.branch-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--dark);
+  line-height: 1.25;
+  margin-bottom: 2px;
+}
+
+.branch-district {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--red);
+  margin-bottom: 6px;
+  text-transform: capitalize;
+}
+
+.branch-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.meta-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 11px;
+  color: rgba(26, 39, 68, 0.65);
+  line-height: 1.3;
+}
+
+.meta-item svg {
+  color: #a4b0be;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.branch-card-actions {
+  display: flex;
+  gap: 8px;
+  border-top: 1px solid rgba(26, 39, 68, 0.05);
+  padding-top: 12px;
+}
+
+.card-action-btn {
+  flex: 1;
+  height: 38px;
+  border-radius: 50px;
+  border: 1px solid rgba(26, 39, 68, 0.09);
+  background: var(--white);
+  color: var(--dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.card-action-btn:hover {
+  background: rgba(26, 39, 68, 0.03);
+  border-color: rgba(26, 39, 68, 0.15);
+}
+
+.card-action-btn:active {
+  transform: scale(0.96);
+}
+
+/* ---- Social ---- */
+.social-row {
+  display: flex;
+  gap: clamp(8px, 2vw, 14px);
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.soc {
+  width: clamp(40px, 9vw, 52px);
+  height: clamp(40px, 9vw, 52px);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: transform 0.14s;
+  border: none; outline: none;
+}
+.soc:hover { transform: scale(1.1); }
+.soc:active { transform: scale(0.93); }
+.soc-ig { background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
+.soc-tt { background: #010101; }
+.soc-fb { background: #1877F2; }
+
+.copyright {
+  font-size: clamp(9px, 2vw, 12px);
+  color: rgba(26,39,68,0.45);
+  text-align: center;
+  padding-bottom: 8px;
+}
+
+/* ---- Tablet ---- */
+@media (min-width: 768px) {
+  .content {
+    max-width: 960px;
+    gap: 28px;
+  }
+
+  .city-switcher {
+    max-width: 420px;
+    align-self: center;
+  }
+
+  .branch-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+}
+
+/* ---- Large Desktop ---- */
+@media (min-width: 1200px) {
+  .content {
+    max-width: 1100px;
+  }
+}
+
+/* ---- Bottom Navigation ---- */
+.bottom-nav-wrapper {
+  position: fixed;
+  bottom: clamp(16px, 4vw, 24px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  min-width: 280px;
+  width: clamp(280px, 70vw, 380px);
+}
+.bottom-nav {
+  background: var(--white);
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+  padding: 8px 16px;
+  border-radius: 50px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  gap: 4px;
+}
+.nav-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 52px;
+  height: 46px;
+  border-radius: 50px;
+  text-decoration: none;
+  color: rgba(26,39,68,0.5);
+  transition: all 0.3s ease;
+}
+.nav-item svg {
+  width: 26px;
+  height: 26px;
+  transition: transform 0.2s;
+}
+.nav-item:hover {
+  color: var(--dark);
+}
+.nav-item.active {
+  background: var(--red);
+  color: var(--white);
+}
+.nav-item:hover svg {
+  transform: translateY(-2px);
+}
+.nav-item.active svg {
+  transform: translateY(0);
+}
+.nav-item:active {
+  transform: scale(0.92);
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Main Content -->
+  <div class="content">
+
+    <!-- Logo -->
+    <div class="logo-wrap">
+      <img src="media/logo2.webp" alt="Karak Express">
+    </div>
+
+    <!-- Tagline -->
+    <div class="tagline">
+      <div class="tagline-inner">
+        <div class="spark">
+          <span></span>
+          <span></span>
+        </div>
+        <h1>Our Branches</h1>
+      </div>
+      <div class="tagline-line"></div>
+    </div>
+
+    <!-- City Switcher -->
+    <div class="city-switcher">
+      <button class="city-tab active" data-city="madinah">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- Dome -->
+          <path d="M12 21v-4c0-2.2 1.8-4 4-4s4 1.8 4 4v4H12z" fill="currentColor" fill-opacity="0.2"/>
+          <path d="M16 13V9"/>
+          <circle cx="16" cy="8" r="1"/>
+          <!-- Minaret -->
+          <path d="M6 21V6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v15H6z"/>
+          <path d="M8 5V2"/>
+          <path d="M7 2h2"/>
+          <!-- Ground -->
+          <path d="M2 21h20"/>
+        </svg>
+        <span>Madinah</span>
+      </button>
+      <button class="city-tab" data-city="makkah">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <!-- Cube body -->
+          <path d="M12 2L3 7v10l9 5 9-5V7l-9-5zm0 2.3l6.5 3.6L12 11.5 5.5 7.9 12 4.3zm-7.5 5l6.5 3.6v7.3l-6.5-3.6V9.3zm15 3.6l-6.5 3.6v-7.3l6.5-3.6v7.3z"/>
+          <!-- Golden belt Kiswa -->
+          <path d="M3 8.3l9 5 9-5v-1l-9 5-9-5v1z" fill="#F5B731"/>
+        </svg>
+        <span>Makkah</span>
+      </button>
+    </div>
+
+    <!-- Branch Cards -->
+    <div class="branch-list">
+
+      <!-- Madinah 1 -->
+      <div class="branch-card" data-city="madinah">
+        <div class="branch-card-top">
+          <div class="branch-image-wrapper">
+            <img src="media/storefront_madinah.png" alt="Central Madinah">
+          </div>
+          <div class="branch-info">
+            <div class="branch-status">
+              <span class="status-dot"></span>
+              <span class="status-text">Open</span>
+            </div>
+            <h3 class="branch-title">Central Madinah</h3>
+            <div class="branch-district">Al Salam District</div>
+            <div class="branch-meta">
+              <div class="meta-item">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+                <span>King Abdullah Rd, Al Salam, Madinah 42311, Saudi Arabia</span>
+              </div>
+              <div class="meta-item">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+                <span>6:00 AM - 1:00 AM</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="branch-card-actions">
+          <a href="https://maps.google.com/?q=King+Abdullah+Rd+Al+Salam+Madinah" target="_blank" class="card-action-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="19" x2="19" y2="5"></line>
+              <polyline points="12 5 19 5 19 12"></polyline>
+            </svg>
+            <span>Directions</span>
+          </a>
+          <a href="tel:+966539714655" class="card-action-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+            <span>Call</span>
+          </a>
+          <a href="https://wa.me/966539714655" target="_blank" class="card-action-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+            </svg>
+            <span>WhatsApp</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Madinah 2 -->
+      <div class="branch-card" data-city="madinah">
+        <div class="branch-card-top">
+          <div class="branch-image-wrapper">
+            <img src="media/storefront_madinah.png" alt="Quba Branch">
+          </div>
+          <div class="branch-info">
+            <div class="branch-status">
+              <span class="status-dot"></span>
+              <span class="status-text">Open</span>
+            </div>
+            <h3 class="branch-title">Quba Branch</h3>
+            <div class="branch-district">Quba District</div>
+            <div class="branch-meta">
+              <div class="meta-item">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+                <span>Quba Imam Ali St, Quba, Madinah 42316</span>
+              </div>
+              <div class="meta-item">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+                <span>6:00 AM - 12:00 AM</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="branch-card-actions">
+          <a href="https://maps.google.com/?q=Quba+Imam+Ali+St+Madinah" target="_blank" class="card-action-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="19" x2="19" y2="5"></line>
+              <polyline points="12 5 19 5 19 12"></polyline>
+            </svg>
+            <span>Directions</span>
+          </a>
+          <a href="tel:+966539714655" class="card-action-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+            <span>Call</span>
+          </a>
+          <a href="https://wa.me/966539714655" target="_blank" class="card-action-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+            </svg>
+            <span>WhatsApp</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Madinah 3 -->
+      <div class="branch-card" data-city="madinah">
+        <div class="branch-card-top">
+          <div class="branch-image-wrapper">
+            <img src="media/storefront_madinah.png" alt="Al Noor Mall">
+          </div>
+          <div class="branch-info">
+            <div class="branch-status">
+              <span class="status-dot"></span>
+              <span class="status-text">Open</span>
+            </div>
+            <h3 class="branch-title">Al Noor Mall</h3>
+            <div class="branch-district">Madinah</div>
+            <div class="branch-meta">
+              <div class="meta-item">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+                <span>Al Noor Mall, Prince Mohammed Bin Abdulaziz Rd, Madinah 42531</span>
+              </div>
+              <div class="meta-item">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+                <span>6:00 AM - 12:00 AM</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="branch-card-actions">
+          <a href="https://maps.google.com/?q=Al+Noor+Mall+Madinah" target="_blank" class="card-action-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="19" x2="19" y2="5"></line>
+              <polyline points="12 5 19 5 19 12"></polyline>
+            </svg>
+            <span>Directions</span>
+          </a>
+          <a href="tel:+966539714655" class="card-action-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+            <span>Call</span>
+          </a>
+          <a href="https://wa.me/966539714655" target="_blank" class="card-action-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+            </svg>
+            <span>WhatsApp</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Madinah 4 -->
+      <div class="branch-card" data-city="madinah">
+        <div class="branch-card-top">
+          <div class="branch-image-wrapper">
+            <img src="media/storefront_madinah.png" alt="Sultana Branch">
+          </div>
+          <div class="branch-info">
+            <div class="branch-status">
+              <span class="status-dot"></span>
+              <span class="status-text">Open</span>
+            </div>
+            <h3 class="branch-title">Sultana Branch</h3>
+            <div class="branch-district">Madinah</div>
+            <div class="branch-meta">
+              <div class="meta-item">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+                <span>Sultana Rd, Opp. Sultana Center, Madinah 42523</span>
+              </div>
+              <div class="meta-item">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+                <span>6:00 AM - 1:00 AM</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="branch-card-actions">
+          <a href="https://maps.google.com/?q=Sultana+Rd+Madinah" target="_blank" class="card-action-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="19" x2="19" y2="5"></line>
+              <polyline points="12 5 19 5 19 12"></polyline>
+            </svg>
+            <span>Directions</span>
+          </a>
+          <a href="tel:+966539714655" class="card-action-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+            <span>Call</span>
+          </a>
+          <a href="https://wa.me/966539714655" target="_blank" class="card-action-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+            </svg>
+            <span>WhatsApp</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Makkah 1 -->
+      <div class="branch-card" data-city="makkah">
+        <div class="branch-card-top">
+          <div class="branch-image-wrapper">
+            <img src="media/storefront_madinah.png" alt="Ajyad Branch">
+          </div>
+          <div class="branch-info">
+            <div class="branch-status">
+              <span class="status-dot"></span>
+              <span class="status-text">Open</span>
+            </div>
+            <h3 class="branch-title">Ajyad Branch</h3>
+            <div class="branch-district">Makkah</div>
+            <div class="branch-meta">
+              <div class="meta-item">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+                <span>Ajyad St, Near Clock Tower, Makkah 24231</span>
+              </div>
+              <div class="meta-item">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+                <span>6:00 AM - 2:00 AM</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="branch-card-actions">
+          <a href="https://maps.google.com/?q=Ajyad+St+Makkah" target="_blank" class="card-action-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="19" x2="19" y2="5"></line>
+              <polyline points="12 5 19 5 19 12"></polyline>
+            </svg>
+            <span>Directions</span>
+          </a>
+          <a href="tel:+966539714655" class="card-action-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+            <span>Call</span>
+          </a>
+          <a href="https://wa.me/966539714655" target="_blank" class="card-action-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+            </svg>
+            <span>WhatsApp</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Social -->
+    <div class="social-row">
+      <a href="https://www.instagram.com/karakexpressksa/" target="_blank" class="soc soc-ig" title="Instagram">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="5"/>
+          <circle cx="17.5" cy="6.5" r="1.5" fill="white" stroke="none"/>
+        </svg>
+      </a>
+      <a href="https://www.tiktok.com/" target="_blank" class="soc soc-tt" title="TikTok">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+          <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.29 6.29 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34l-.05-9.34a8.26 8.26 0 0 0 4.83 1.54V4.06a4.85 4.85 0 0 1-1.01-.62z"/>
+        </svg>
+      </a>
+      <a href="https://www.facebook.com/karakexpressksa" target="_blank" class="soc soc-fb" title="Facebook">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+        </svg>
+      </a>
+    </div>
+
+    <div class="copyright">© 2024 Karak Express. All rights reserved.</div>
+  </div>
+</div>
+
+<!-- Bottom Navigation -->
+<div class="bottom-nav-wrapper">
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+      </svg>
+    </a>
+    <a href="menu.html" class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </a>
+    <a href="branches.html" class="nav-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+        <circle cx="12" cy="10" r="3"></circle>
+      </svg>
+    </a>
+  </nav>
+</div>
+
+<script>
+const b64 = "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";
+// document.querySelector('.logo-wrap img').src = 'data:image/webp;base64,' + b64;
+
+// Tab Switcher Logic
+const tabs = document.querySelectorAll('.city-tab');
+const cards = document.querySelectorAll('.branch-card');
+
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    tabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+
+    const selectedCity = tab.dataset.city;
+    cards.forEach(card => {
+      if (card.dataset.city === selectedCity) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  });
+});
+
+// Trigger initial click to display Madinah
+document.querySelector('.city-tab.active').click();
+</script>
+</body>
+</html>
