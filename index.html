@@ -14,23 +14,51 @@
   --green: #25D366;
   --dark: #1a2744;
   --white: #ffffff;
+  --home-bg: url("media/gemini-karak-bg-home.png");
+  --home-bg-desktop: url("media/gemini-karak-bg-home-desktop.png");
 }
 
 html, body {
   min-height: 100%;
   font-family: 'Poppins', sans-serif;
-  background: var(--yellow);
+  background:
+    linear-gradient(135deg, rgba(245, 183, 49, 0.45), rgba(245, 183, 49, 0.30)),
+    var(--home-bg) center/cover no-repeat fixed;
   overflow-x: hidden;
 }
 
 .page {
   min-height: 100vh;
-  background: var(--yellow);
+  background: transparent;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-bottom: 80px;
+}
+
+.page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    linear-gradient(135deg, rgba(245, 183, 49, 0.45), rgba(245, 183, 49, 0.30)),
+    var(--home-bg) center/cover no-repeat;
+  background-attachment: fixed;
+  filter: saturate(1.05) contrast(1.03);
+  pointer-events: none;
+}
+
+.page::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(circle at top, rgba(255,255,255,0.18), transparent 24%),
+    linear-gradient(180deg, rgba(26,39,68,0.02), rgba(26,39,68,0.06));
+  pointer-events: none;
 }
 
 /* ---- Food decorations ---- */
@@ -39,7 +67,14 @@ html, body {
   inset: 0;
   pointer-events: none;
   overflow: hidden;
-  z-index: 0;
+  z-index: 1;
+}
+
+.food-bg img {
+  position: absolute;
+  display: block;
+  opacity: 0.95;
+  filter: drop-shadow(0 8px 18px rgba(0,0,0,0.18));
 }
 
 .food-tl {
@@ -123,10 +158,9 @@ html, body {
   letter-spacing: -0.3px;
 }
 .tagline-line {
-  width: 90px;
-  height: 3.5px;
-  background: var(--red);
-  border-radius: 2px;
+  display: block;
+  width: 120px;
+  height: 18px;
   margin: 8px auto 0;
 }
 
@@ -193,19 +227,32 @@ html, body {
   flex-wrap: wrap;
 }
 .soc {
-  width: clamp(40px, 9vw, 52px);
-  height: clamp(40px, 9vw, 52px);
-  border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
+  width: clamp(46px, 9vw, 58px);
+  height: clamp(46px, 9vw, 58px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  transition: transform 0.14s;
-  border: none; outline: none;
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+  border: 1px solid rgba(255,255,255,0.95);
+  outline: none;
+  background: rgba(255,255,255,0.96);
+  color: var(--dark);
+  box-shadow: 0 8px 18px rgba(26,39,68,0.12);
 }
-.soc:hover { transform: scale(1.1); }
-.soc:active { transform: scale(0.93); }
-.soc-ig { background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
-.soc-tt { background: #010101; }
-.soc-fb { background: #1877F2; }
+.soc svg {
+  width: 30px;
+  height: 30px;
+  display: block;
+  fill: currentColor;
+}
+.soc:hover {
+  transform: translateY(-1px) scale(1.05);
+  box-shadow: 0 10px 22px rgba(26,39,68,0.16);
+}
+.soc:active { transform: scale(0.96); }
+.soc-ig, .soc-tt, .soc-fb { color: var(--red); background: rgba(255,255,255,0.96); }
 .soc-x  { background: #000; }
 .soc-yt { background: #FF0000; }
 
@@ -218,12 +265,26 @@ html, body {
 
 /* ---- Tablet / Desktop ---- */
 @media (min-width: 768px) {
+  html, body {
+    background:
+      linear-gradient(135deg, rgba(245, 183, 49, 0.42), rgba(245, 183, 49, 0.26)),
+      var(--home-bg-desktop) center/100% auto no-repeat fixed;
+  }
+
+  .page::before {
+    background:
+      linear-gradient(135deg, rgba(245, 183, 49, 0.42), rgba(245, 183, 49, 0.26)),
+      var(--home-bg-desktop) center/100% auto no-repeat;
+    background-attachment: fixed;
+  }
+
   .content {
     max-width: 560px;
     gap: 28px;
   }
   .food-tl, .food-tr { width: clamp(200px, 18vw, 280px); }
   .food-bl, .food-br { width: clamp(180px, 16vw, 260px); }
+  .food-bg img { opacity: 0.98; }
 }
 
 @media (min-width: 1024px) {
@@ -313,13 +374,15 @@ html, body {
         </div>
         <h1>Great Taste,<br>Closer to You</h1>
       </div>
-      <div class="tagline-line"></div>
+      <svg class="tagline-line" viewBox="0 0 120 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M3 10C18 1 35 0 50 6C66 12 82 16 98 10C107 6 113 3 117 4" stroke="#E84040" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
     </div>
 
     <!-- Buttons -->
     <div class="btn-list">
 
-      <a href="menu.html" class="btn btn-menu">
+      <a href="menu2.html" class="btn btn-menu">
         <div class="btn-icon">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
@@ -327,17 +390,17 @@ html, body {
           </svg>
         </div>
         <span class="btn-label">View Menu</span>
-        <span class="btn-arrow">›</span>
+        <span class="btn-arrow"><img src="media/right-arrow1.png" alt="" width="18" height="18"></span>
       </a>
 
-      <a href="https://wa.me/966539714655" target="_blank" class="btn btn-whatsapp">
+      <a href="https://wa.me/966552591157" target="_blank" class="btn btn-whatsapp">
         <div class="btn-icon">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
           </svg>
         </div>
         <span class="btn-label">WhatsApp</span>
-        <span class="btn-arrow">›</span>
+        <span class="btn-arrow"><img src="media/right-arrow1.png" alt="" width="18" height="18"></span>
       </a>
 
       <a href="branches.html" class="btn btn-white">
@@ -348,7 +411,7 @@ html, body {
           </svg>
         </div>
         <span class="btn-label">Our Branches</span>
-        <span class="btn-arrow">›</span>
+        <span class="btn-arrow"><img src="media/right-arrow.png" alt="" width="18" height="18"></span>
       </a>
 
       <a href="https://karakexpress.com/" target="_blank" class="btn btn-white">
@@ -360,7 +423,7 @@ html, body {
           </svg>
         </div>
         <span class="btn-label">Website</span>
-        <span class="btn-arrow">›</span>
+        <span class="btn-arrow"><img src="media/right-arrow.png" alt="" width="18" height="18"></span>
       </a>
 
     </div>
@@ -368,25 +431,23 @@ html, body {
     <!-- Social -->
     <div class="social-row">
       <a href="https://www.instagram.com/karakexpressksa/" target="_blank" class="soc soc-ig" title="Instagram">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-          <circle cx="12" cy="12" r="5"/>
-          <circle cx="17.5" cy="6.5" r="1.5" fill="white" stroke="none"/>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4zm5 3.8A5.2 5.2 0 1 0 17.2 12 5.2 5.2 0 0 0 12 6.8zm0 2.1A3.1 3.1 0 1 1 8.9 12 3.1 3.1 0 0 1 12 8.9zm5.6-3.2a1.2 1.2 0 1 0 1.2 1.2 1.2 1.2 0 0 0-1.2-1.2z"/>
         </svg>
       </a>
       <a href="https://www.tiktok.com/" target="_blank" class="soc soc-tt" title="TikTok">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-          <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.29 6.29 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34l-.05-9.34a8.26 8.26 0 0 0 4.83 1.54V4.06a4.85 4.85 0 0 1-1.01-.62z"/>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M14.2 3h2.1a4.9 4.9 0 0 0 4.9 4.9v2.2a7.1 7.1 0 0 1-4.9-2v8.2A7.1 7.1 0 1 1 9.2 9.2h1.2v3.3a3.8 3.8 0 1 0 3.8 3.8V3z"/>
         </svg>
       </a>
       <a href="https://www.facebook.com/karakexpressksa" target="_blank" class="soc soc-fb" title="Facebook">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M13 21v-8h2.8l.7-3H13V3.8A1.8 1.8 0 0 1 14.8 2H17V0h-2.5A4.5 4.5 0 0 0 10 4.5V10H7v3h3v8z"/>
         </svg>
       </a>
     </div>
 
-    <div class="copyright">© 2024 Karak Express. All rights reserved.</div>
+    <div class="copyright">© Copyright 2026. All Rights Reserved by KARAK EXPRESS - Spice World Arabia</div>
   </div>
 </div>
 
@@ -399,11 +460,11 @@ html, body {
         <polyline points="9 22 9 12 15 12 15 22"></polyline>
       </svg>
     </a>
-    <a href="menu.html" class="nav-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="3" y1="12" x2="21" y2="12"></line>
-        <line x1="3" y1="6" x2="21" y2="6"></line>
-        <line x1="3" y1="18" x2="21" y2="18"></line>
+    <a href="menu2.html" class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="4" y1="7" x2="20" y2="7"></line>
+        <line x1="4" y1="12" x2="20" y2="12"></line>
+        <line x1="4" y1="17" x2="20" y2="17"></line>
       </svg>
     </a>
     <a href="branches.html" class="nav-item">
