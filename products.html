@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Karak Express - Products</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --yellow: #F5B731;
+      --red: #E84040;
+      --dark: #1a2744;
+      --white: #ffffff;
+      --bg-yellow: #F5B731;
+      --home-bg: url("media/gemini-karak-bg-home.png");
+      --home-bg-desktop: url("media/gemini-karak-bg-home-desktop.png");
+    }
+
+    html, body {
+      min-height: 100%;
+      font-family: 'Poppins', sans-serif;
+      background:
+        linear-gradient(135deg, rgba(245, 183, 49, 0.45), rgba(245, 183, 49, 0.30)),
+        var(--home-bg) center/cover no-repeat fixed;
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    .page {
+      min-height: 100vh;
+      background: transparent;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 120px;
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .page::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        linear-gradient(135deg, rgba(245, 183, 49, 0.45), rgba(245, 183, 49, 0.30)),
+        var(--home-bg) center/cover no-repeat;
+      background-attachment: fixed;
+      filter: saturate(1.05) contrast(1.03);
+      pointer-events: none;
+    }
+
+    .page::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,0.18), transparent 24%),
+        linear-gradient(180deg, rgba(26,39,68,0.02), rgba(26,39,68,0.06));
+      pointer-events: none;
+    }
+
+    @media (min-width: 768px) {
+      html, body {
+        background:
+          linear-gradient(135deg, rgba(245, 183, 49, 0.42), rgba(245, 183, 49, 0.26)),
+          var(--home-bg-desktop) center/100% auto no-repeat fixed;
+      }
+
+      .page::before {
+        background:
+          linear-gradient(135deg, rgba(245, 183, 49, 0.42), rgba(245, 183, 49, 0.26)),
+          var(--home-bg-desktop) center/100% auto no-repeat;
+        background-attachment: fixed;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .page {
+        max-width: 1200px;
+      }
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      padding: 16px 16px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .header-row {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      gap: 16px;
+      margin-bottom: 16px;
+      margin-top: 10px;
+    }
+    
+    .logo-box {
+      width: 64px;
+      height: 64px;
+      background: var(--dark);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .logo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .tagline {
+      text-align: center;
+      position: relative;
+    }
+
+    .tagline-inner {
+      display: inline-block;
+      position: relative;
+    }
+
+    .spark {
+      position: absolute;
+      left: -2px;
+      top: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .spark span {
+      display: block;
+      height: 3px;
+      border-radius: 2px;
+      background: var(--red);
+    }
+
+    .spark span:first-child { width: 8px; transform: rotate(-20deg); }
+    .spark span:last-child { width: 13px; }
+
+    .tagline h1 {
+      font-size: clamp(22px, 5.5vw, 34px);
+      font-weight: 700;
+      color: var(--dark);
+      margin-left: 20px;
+      line-height: 1.2;
+      letter-spacing: -0.3px;
+    }
+
+    .tagline-line {
+      display: block;
+      width: 120px;
+      height: 18px;
+      margin: 3px auto 0;
+    }
+
+    /* Professional Back Button with Icon */
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--white);
+      padding: 10px 24px;
+      border-radius: 50px;
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: all 0.2s ease;
+      width: fit-content;
+      border: none;
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      z-index: 2;
+    }
+    .back-btn:hover {
+      transform: translateX(-5px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+      background: var(--yellow);
+    }
+    .back-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--red);
+      stroke-width: 2.5;
+      fill: none;
+    }
+
+    .products-container {
+      width: 100%;
+      z-index: 2;
+    }
+
+    /* Products Grid - 3 columns on desktop */
+    .products-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+    }
+
+    @media (min-width: 768px) {
+      .products-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+    }
+
+    /* Product Card - Horizontal layout like image (image left, text right) */
+    .product-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 3px 12px 3px 3px;
+      background: var(--white);
+      border-radius: 18px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .product-card:hover {
+      transform: scale(1.01);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+    .product-img {
+      width: 76px;
+      height: 76px;
+      border-radius: 14px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .product-info {
+      flex: 1;
+    }
+    .product-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+    .product-desc {
+      font-size: 11px;
+      color: #747d8c;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Keep horizontal layout on desktop as well (like the image) */
+    @media (min-width: 768px) {
+      .product-card {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 3px 12px 3px 3px;
+      }
+      .product-img {
+        width: 76px;
+        height: 76px;
+      }
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--dark);
+      font-weight: 600;
+      font-size: 15px;
+      background: var(--white);
+      border-radius: 20px;
+      width: 100%;
+    }
+
+    /* Branch Selection Modal (Popup) */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      visibility: hidden;
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+    .modal-overlay.active {
+      visibility: visible;
+      opacity: 1;
+    }
+    .branch-modal {
+      background: var(--white);
+      width: 90%;
+      max-width: 400px;
+      max-height: 80vh;
+      border-radius: 32px;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      transform: scale(0.95);
+      transition: transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .modal-overlay.active .branch-modal {
+      transform: scale(1);
+    }
+    .modal-header {
+      background: var(--red);
+      padding: 20px 20px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .modal-header h3 {
+      color: white;
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .modal-header p {
+      color: rgba(255,255,255,0.85);
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .modal-body {
+      padding: 20px 20px 24px;
+      flex: 1;
+      overflow-y: auto;
+      scrollbar-width: thin;
+    }
+    .modal-body::-webkit-scrollbar {
+      width: 4px;
+    }
+    .modal-body::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    .modal-body::-webkit-scrollbar-thumb {
+      background: var(--red);
+      border-radius: 10px;
+    }
+    .city-selector {
+      margin-bottom: 20px;
+    }
+    .city-selector label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #747d8c;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: block;
+      margin-bottom: 8px;
+    }
+    .city-buttons {
+      display: flex;
+      gap: 10px;
+    }
+    .city-btn {
+      flex: 1;
+      padding: 10px;
+      border: 2px solid #eef2f5;
+      background: white;
+      border-radius: 14px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--dark);
+    }
+    .city-btn.active {
+      background: var(--dark);
+      color: white;
+      border-color: var(--dark);
+    }
+    .branch-selector {
+      margin-bottom: 24px;
+    }
+    .branch-selector label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #747d8c;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: block;
+      margin-bottom: 8px;
+    }
+    .branch-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .branch-option {
+      padding: 12px 14px;
+      border: 2px solid #eef2f5;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .branch-option:hover {
+      border-color: var(--red);
+      background: #fff5f5;
+    }
+    .branch-option.selected {
+      border-color: var(--red);
+      background: #fff5f5;
+    }
+    .branch-name {
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--dark);
+    }
+    .branch-address {
+      font-size: 10px;
+      color: #a0aaba;
+      margin-top: 3px;
+      line-height: 1.3;
+    }
+    .check-icon {
+      color: var(--red);
+      font-size: 18px;
+      font-weight: 800;
+    }
+    .confirm-btn {
+      width: 100%;
+      background: var(--red);
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 50px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 800;
+      font-size: 15px;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.2s;
+      margin-top: 6px;
+      box-shadow: 0 6px 14px rgba(232,64,64,0.3);
+    }
+    .confirm-btn:active {
+      transform: scale(0.97);
+    }
+    .close-modal-icon {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      background: rgba(0,0,0,0.3);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: white;
+      font-size: 18px;
+      font-weight: 700;
+      transition: background 0.2s;
+    }
+    .close-modal-icon:hover {
+      background: rgba(0,0,0,0.5);
+    }
+
+    .bottom-nav-wrapper {
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      width: calc(100% - 32px);
+      max-width: 420px;
+    }
+
+    .bottom-nav {
+      background: var(--white);
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      padding: 8px;
+      border-radius: 30px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 48px;
+      height: 44px;
+      border-radius: 20px;
+      text-decoration: none;
+      color: #a4b0be;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .nav-item.active {
+      background: var(--red);
+      color: var(--white);
+    }
+
+    .nav-item:hover {
+      background: rgba(232, 64, 64, 0.1);
+      color: var(--red);
+    }
+
+    .nav-item svg {
+      width: 24px;
+      height: 24px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <div class="content">
+    
+      <div class="header-row">
+        <div class="logo-box">
+          <img src="media/logo2.webp" alt="Karak Express">
+        </div>
+        <div class="tagline">
+          <div class="tagline-inner">
+            <div class="spark">
+              <span></span>
+              <span></span>
+            </div>
+            <h1 id="pageTitle">Products</h1>
+          </div>
+          <svg class="tagline-line" viewBox="0 0 120 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M3 10C18 1 35 0 50 6C66 12 82 16 98 10C107 6 113 3 117 4" stroke="#E84040" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Professional Back Button with Icon -->
+      <button class="back-btn" onclick="goBack()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Back to Menu
+      </button>
+
+      <div class="products-container">
+        <div class="products-grid" id="productsGrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-nav-wrapper">
+    <nav class="bottom-nav">
+      <a href="index.html" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+      </a>
+      <div class="nav-item" id="menuNavBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </div>
+      <a href="branches.html" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+      </a>
+    </nav>
+  </div>
+
+  <!-- Branch Selection Modal (Popup) -->
+  <div class="modal-overlay" id="branchModal">
+    <div class="branch-modal">
+      <div class="modal-header">
+        <h3>Select Your Branch</h3>
+        <p>Choose your city and branch to get started</p>
+      </div>
+      <div class="modal-body">
+        <div class="city-selector">
+          <label>CITY</label>
+          <div class="city-buttons">
+            <button class="city-btn" data-city="makkah">Makkah</button>
+            <button class="city-btn" data-city="madina">Madina</button>
+          </div>
+        </div>
+        <div class="branch-selector">
+          <label>BRANCH</label>
+          <div class="branch-list" id="branchList"></div>
+        </div>
+        <button class="confirm-btn" id="confirmBranchBtn">CONFIRM LOCATION</button>
+      </div>
+      <div class="close-modal-icon" id="closeModalBtn">✕</div>
+    </div>
+  </div>
+
+  <script>
+    // Branch data for both cities
+    const branchesData = {
+      makkah: [
+        { name: "Karak Express", address: "Ghar-e-Hira", menuFile: "makkahmenu.html" },
+        { name: "Karak Express", address: "Jabal Noor Parking", menuFile: "makkahmenu.html" },
+        { name: "Karak Express", address: "Al Safwa Tower, Opposite King Abdulaziz Gate, Al Haram, Makkah", menuFile: "makkahmenu.html" },
+        { name: "Karak Express", address: "Makkah Towers", menuFile: "makkahmenu.html" }
+      ],
+      madina: [
+        { name: "Karak Express", address: "Taiba Medinah Suites, inside Taiba Shopping Center, gate# 3, Medinah", menuFile: "madinamenu.html" },
+        { name: "Karak Express", address: "Inside pedestrian walkway, Al Haram District, Madinah 42311", menuFile: "madinamenu.html" },
+        { name: "Karak Express", address: "Saad bin Abi Waqas Street, Madinah 42311", menuFile: "madinamenu.html" }
+      ]
+    };
+
+    let currentCity = "makkah";
+    let selectedBranch = null;
+
+    // DOM elements for modal
+    const modal = document.getElementById("branchModal");
+    const menuNavBtn = document.getElementById("menuNavBtn");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+    const confirmBtn = document.getElementById("confirmBranchBtn");
+    const branchListDiv = document.getElementById("branchList");
+    const cityBtns = document.querySelectorAll(".city-btn");
+
+    // Open modal when menu icon is clicked
+    if (menuNavBtn) {
+      menuNavBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        modal.classList.add("active");
+        currentCity = "makkah";
+        selectedBranch = null;
+        updateCityButtons();
+        renderBranchList();
+      });
+    }
+
+    // Close modal
+    function closeModal() {
+      modal.classList.remove("active");
+    }
+    if (closeModalBtn) closeModalBtn.addEventListener("click", closeModal);
+    if (modal) {
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) closeModal();
+      });
+    }
+
+    // Update active state for city buttons
+    function updateCityButtons() {
+      cityBtns.forEach(btn => {
+        const city = btn.dataset.city;
+        if (city === currentCity) {
+          btn.classList.add("active");
+        } else {
+          btn.classList.remove("active");
+        }
+      });
+    }
+
+    // Render branch list based on current city
+    function renderBranchList() {
+      const branches = branchesData[currentCity];
+      if (!branchListDiv) return;
+      branchListDiv.innerHTML = "";
+      branches.forEach((branch, index) => {
+        const branchDiv = document.createElement("div");
+        branchDiv.className = "branch-option";
+        if (selectedBranch && selectedBranch.address === branch.address) {
+          branchDiv.classList.add("selected");
+        }
+        branchDiv.innerHTML = `
+          <div>
+            <div class="branch-name">${branch.name}</div>
+            <div class="branch-address">${branch.address}</div>
+          </div>
+          <div class="check-icon">${selectedBranch && selectedBranch.address === branch.address ? "✓" : ""}</div>
+        `;
+        branchDiv.addEventListener("click", () => {
+          document.querySelectorAll(".branch-option").forEach(opt => opt.classList.remove("selected"));
+          branchDiv.classList.add("selected");
+          document.querySelectorAll(".check-icon").forEach(icon => icon.innerHTML = "");
+          branchDiv.querySelector(".check-icon").innerHTML = "✓";
+          selectedBranch = branch;
+        });
+        branchListDiv.appendChild(branchDiv);
+      });
+    }
+
+    // City button click handlers
+    cityBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        currentCity = btn.dataset.city;
+        selectedBranch = null;
+        updateCityButtons();
+        renderBranchList();
+      });
+    });
+
+    // Confirm button - redirect to respective menu page
+    if (confirmBtn) {
+      confirmBtn.addEventListener("click", () => {
+        if (!selectedBranch) {
+          alert("Please select a branch");
+          return;
+        }
+        window.location.href = selectedBranch.menuFile;
+      });
+    }
+
+    // Initial render
+    updateCityButtons();
+    renderBranchList();
+
+    // Product details mapping
+    const productDetails = {
+      "Krispy Broast 2pcs": { desc: "2pcs krispy broast, tasty fries, bun, garlic and ketchup.", img: "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=200&q=80" },
+      "Krispy Broast 4pcs": { desc: "Full satisfaction family box filled with 4 pieces of gold crisped chicken broast.", img: "https://images.unsplash.com/photo-1562967914-608f82629a7a?w=200&q=80" },
+      "Hot Wings Bucket": { desc: "10 pieces of hot and spicy breaded wings deep fried to a beautiful golden skin texture.", img: "https://images.unsplash.com/photo-1569058242253-92a9c755a0ec?w=200&q=80" },
+      "Krispy Biryani": { desc: "Aromatic biryani rice topped with krispy fried chicken pieces.", img: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=200&q=80" },
+      "Chicken Biryani - Small": { desc: "2 pieces, fresh local chicken, long grain basmati rice with special masala, served with raita.", img: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=200&q=80" },
+      "Chicken Biryani": { desc: "Fresh local chicken, long grain basmati rice with special masala, served with raita.", img: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=200&q=80" },
+      "Beef Biryani": { desc: "Aromatic basmati rice slow cooked with tender beef and biryani spices.", img: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=200&q=80" },
+      "Beef Biryani - Small": { desc: "Aromatic basmati rice slow cooked with tender beef and biryani spices, served with raita.", img: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=200&q=80" },
+      "Sindhi Spicy Biryani": { desc: "Traditional rich Sindhi recipe with yogurt masala, green chilies, and plums.", img: "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=200&q=80" },
+      "Classic Biryani Combo": { desc: "Flavorful traditional biryani paired with sides and refreshing drink.", img: "https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=200&q=80" },
+      "Shawarma Shami": { desc: "Fresh local chicken wrapped in arabic bread with unique sauce, salad and fries.", img: "https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?w=200&q=80" },
+      "Zesty Jalapeno Shawarma": { desc: "Grilled chicken with jalapeno slices, pita wrap, and spicy mayo.", img: "https://images.unsplash.com/photo-1529042410759-befb1204b468?w=200&q=80" },
+      "Open Shawarma Platter": { desc: "Deconstructed shawarma with humous, pita slices, and pickles.", img: "https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?w=200&q=80" },
+      "Shawarma Combo": { desc: "Juicy shawarma wrap with fries and a chilled beverage.", img: "https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=200&q=80" },
+      "Beef Burger": { desc: "Fried beef sandwich with ketchup, mayo, lettuce and tomato.", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200&q=80" },
+      "Crunch Zinger Burger": { desc: "Crispy fried chicken thigh filet with fluffy sesame buns and white dressing.", img: "https://images.unsplash.com/photo-1550547660-d9450f859349?w=200&q=80" },
+      "Tower High Burger": { desc: "Stacked burger with dual non-veg strips, cheese, and onion strings.", img: "https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=200&q=80" },
+      "Midnight Burger Mania": { desc: "Double beef patty cheese burger with special garlic dipping sauce.", img: "https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?w=200&q=80" },
+      "Krispo Roll Chicken": { desc: "Crispy fried chicken pieces wrapped inside a flaky paratha layer.", img: "https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?w=200&q=80" },
+      "Garlic Mayo Roll": { desc: "Tender chicken tikka cubes in flatbread with garlic cream.", img: "https://images.unsplash.com/photo-1509722747041-616f39b57569?w=200&q=80" },
+      "Chicken Malai Boti Roll": { desc: "Creamy malai boti roll with mint chutney.", img: "https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?w=200&q=80" },
+      "Karak Pizzaro Supreme": { desc: "Mozzarella, mushroom chunks, onions, and dynamic spices.", img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=200&q=80" },
+      "Chicken Tikka Pizza": { desc: "Thick pizza crust with chicken tikka and red onions.", img: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=200&q=80" },
+      "Garden Veggie Feast": { desc: "Bell peppers, sweet corn, olives, and melted cheese.", img: "https://images.unsplash.com/photo-1541745537411-b8046dc6d66c?w=200&q=80" },
+      "Karak Tea": { desc: "Traditional rich and strong tea made with cardamoms.", img: "https://images.unsplash.com/photo-1571934811356-5cc061b6821f?w=200&q=80" },
+      "Zafrani Special Chai": { desc: "Premium milk tea infused with saffron strands.", img: "https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?w=200&q=80" },
+      "Elaichi Karak Tea": { desc: "Strong tea with crushed green cardamom capsules.", img: "https://images.unsplash.com/photo-1597481499750-3e6b22637e12?w=200&q=80" },
+      "Desi Chai Karak": { desc: "Karak special premium brew.", img: "https://images.unsplash.com/photo-1571934811356-5cc061b6821f?w=200&q=80" },
+      "Fresh Orange Juice": { desc: "Freshly squeezed orange pulps with no additives.", img: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=200&q=80" },
+      "Mint Lemonade Splash": { desc: "Ice cold crushed mint with lime.", img: "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=200&q=80" },
+      "Apple Juice": { desc: "Fresh apple juice, naturally sweet.", img: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=200&q=80" },
+      "Pineapple Juice": { desc: "Refreshing pineapple juice.", img: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=200&q=80" },
+      "Chilled Soft Drinks": { desc: "Selection of refreshing soft drinks served cold.", img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=200&q=80" },
+      "Mineral Water Bottle": { desc: "Pure, clean distilled mineral water.", img: "https://images.unsplash.com/photo-1548741475-7f7219cd1153?w=200&q=80" },
+      "Sparkling Water": { desc: "Refreshing carbonated water.", img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=200&q=80" },
+      "Espresso": { desc: "Strong and rich espresso shot.", img: "https://images.unsplash.com/photo-1507133750040-4a8f57021571?w=200&q=80" },
+      "Cappuccino": { desc: "Espresso with steamed milk foam.", img: "https://images.unsplash.com/photo-1507133750040-4a8f57021571?w=200&q=80" },
+      "Latte": { desc: "Smooth espresso with steamed milk.", img: "https://images.unsplash.com/photo-1507133750040-4a8f57021571?w=200&q=80" },
+      "Americano": { desc: "Espresso diluted with hot water.", img: "https://images.unsplash.com/photo-1507133750040-4a8f57021571?w=200&q=80" },
+      "Mocha": { desc: "Chocolate flavored latte.", img: "https://images.unsplash.com/photo-1507133750040-4a8f57021571?w=200&q=80" },
+      "Fresh Lime Juice": { desc: "Refreshing fresh lime juice.", img: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=200&q=80" },
+      "Strawberry Juice": { desc: "Sweet strawberry juice.", img: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=200&q=80" },
+      "Mango Juice": { desc: "Rich and creamy mango juice.", img: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=200&q=80" }
+    };
+
+    // Get URL parameters
+    function getUrlParams() {
+      const params = new URLSearchParams(window.location.search);
+      return {
+        name: params.get('name'),
+        productsJson: params.get('products')
+      };
+    }
+
+    // Render products on the page - Horizontal layout like the image, no add to cart button
+    function renderProducts() {
+      const params = getUrlParams();
+      const categoryName = params.name ? decodeURIComponent(params.name) : 'Products';
+      const productsJson = params.productsJson ? decodeURIComponent(params.productsJson) : '[]';
+      
+      let products = [];
+      try {
+        products = JSON.parse(productsJson);
+      } catch(e) {
+        products = [];
+      }
+      
+      document.getElementById('pageTitle').innerHTML = categoryName;
+      const productsGrid = document.getElementById('productsGrid');
+      
+      if (!products || products.length === 0) {
+        productsGrid.innerHTML = '<div class="no-results">No products available in this category.</div>';
+        return;
+      }
+      
+      productsGrid.innerHTML = products.map(product => {
+        const details = productDetails[product] || { 
+          desc: "Delicious item from our kitchen", 
+          img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&q=80" 
+        };
+        return `
+          <div class="product-card">
+            <img class="product-img" src="${details.img}" alt="${product}">
+            <div class="product-info">
+              <div class="product-name">${product}</div>
+              <div class="product-desc">${details.desc}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function goBack() {
+      window.location.href = 'madinamenu.html';
+    }
+
+    renderProducts();
+  </script>
+</body>
+</html>
